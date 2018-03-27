@@ -14,7 +14,7 @@ public class BaseModele {
         return id;
     }
 
-    public void setId(Integer id) throws Exception {
+    private void setId(Integer id) throws Exception {
         if (id > 0)
             this.id = id;
         else
