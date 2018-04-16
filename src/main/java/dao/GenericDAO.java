@@ -54,7 +54,7 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
-        try (Connection conn = getConnection();
+        try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(getRequeteFindAll(baseModele));
              ResultSet rs = statement.executeQuery()) {
              return list(baseModele, rs);
@@ -67,7 +67,7 @@ public class GenericDAO implements InterfaceDAO {
     @Override
     public BaseModele findById(BaseModele modele) throws Exception {
         ResultSet rs = null;
-        try (Connection conn = getConnection();
+        try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(getRequeteFindById(modele))) {
             statement.setObject(1, modele.getId());
             rs = statement.executeQuery();
@@ -120,20 +120,9 @@ public class GenericDAO implements InterfaceDAO {
     }
 
     @Override
-    public void closeRessources(ResultSet resultSet, Statement statement, Connection connection) throws Exception {
+    public void closeRessources(ResultSet resultSet, PreparedStatement statement, Connection connection) throws Exception {
         if(resultSet != null) resultSet.close();
         if(statement != null) statement.close();
         if(connection != null) connection.close();
-    }
-
-    @Override
-    public Connection getConnection() throws Exception {
-        return getConnection(Configuration.jdbc, Configuration.hostname, Configuration.port, Configuration.dbname, Configuration.user, Configuration.pass);
-    }
-
-    @Override
-    public Connection getConnection(String jdbc, String hostname, int port, String dbname, String user, String pass) throws Exception {
-        DBConnection dbConnection = new DBConnection(jdbc, hostname, port, dbname, user, pass);
-        return dbConnection.getConnection();
     }
 }

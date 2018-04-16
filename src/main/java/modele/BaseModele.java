@@ -3,6 +3,7 @@ package modele;
 public class BaseModele {
     private Integer id;
     private Integer etat;
+    private String table;
 
     public BaseModele(Integer id) throws Exception {
         this.setId(id);
@@ -15,6 +16,8 @@ public class BaseModele {
     }
 
     public void setId(Integer id) throws Exception {
+        if (id <= 0)
+            throw new Exception("Id négatif ou nul : " + id);
         this.id = id;
     }
 
@@ -24,5 +27,15 @@ public class BaseModele {
 
     public Integer getEtat(){
         return this.etat;
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) throws Exception {
+        if (table.equals(""))
+            throw new Exception("Nom de table vide");
+        this.table = table;
     }
 }
