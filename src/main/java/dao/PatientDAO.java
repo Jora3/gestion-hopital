@@ -1,17 +1,19 @@
 package dao;
 
 import modele.BaseModele;
-import modele.Maladie;
+import modele.Patient;
 import utils.Configuration;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaladieDao implements InterfaceDao {
-    private final String table = "Maladie";
+public class PatientDAO implements InterfaceDAO {
+    private final String table = "Patient";
 
     @Override
     public List<BaseModele> findAll() throws Exception {
@@ -32,16 +34,22 @@ public class MaladieDao implements InterfaceDao {
         }
     }
 
+    @Override
+    public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
+        return null;
+    }
+
     private List<BaseModele> getResultAll(ResultSet resultSet) throws Exception {
-        ArrayList<BaseModele> maladies = new ArrayList<>();
+        ArrayList<BaseModele> patients = new ArrayList<>();
         while (resultSet.next()) {
-            Integer id = resultSet.getInt(1),
-                    idDepartement = resultSet.getInt(4);
+            Integer id = resultSet.getInt(1);
             String nom = resultSet.getString(2),
-                    description = resultSet.getString(3);
-            maladies.add(new Maladie(id, nom, description, idDepartement));
+                    prenom = resultSet.getString(3),
+                    sexe = resultSet.getString(5);
+            Date dateNaissance = resultSet.getDate(4);
+            patients.add(new Patient(id, nom, prenom, dateNaissance, sexe));
         }
-        return maladies;
+        return patients;
     }
 
     @Override
@@ -64,15 +72,16 @@ public class MaladieDao implements InterfaceDao {
     }
 
     private BaseModele getResultById(ResultSet resultSet) throws Exception {
-        Maladie maladie = null;
+        Patient patient = null;
         if (resultSet.next()) {
-            Integer id = resultSet.getInt(1),
-                    idDepartement = resultSet.getInt(4);
-            String nom = resultSet.getString(2),
-                    description = resultSet.getString(3);
-            maladie = new Maladie(id, nom, description, idDepartement);
+            Integer id = resultSet.getInt(1);
+            String nom = resultSet.getNString(2),
+                    prenom = resultSet.getString(3),
+                    sexe = resultSet.getString(5);
+            Date dateNaissance = resultSet.getDate(4);
+            patient = new Patient(id, nom, prenom, dateNaissance, sexe);
         }
-        return maladie;
+        return patient;
     }
 
     @Override
@@ -82,7 +91,8 @@ public class MaladieDao implements InterfaceDao {
         try {
             connection = getConnection();
             statement = connection.createStatement();
-            statement.executeUpdate(getRequeteDelete(modele));
+            Patient patient = (Patient) modele;
+            statement.executeUpdate(getRequeteDelete(patient));
         }
         catch (Exception exception) {
             throw new Exception(exception.getMessage());
@@ -93,25 +103,7 @@ public class MaladieDao implements InterfaceDao {
     }
 
     @Override
-    public void update(BaseModele modele) throws Exception {Connection connection = null;
-        Statement statement = null;
-        try {
-            connection = getConnection();
-            statement = connection.createStatement();
-            Maladie maladie = (Maladie) modele;
-            statement.executeUpdate(getRequeteUpdate(maladie));
-        }
-        catch (Exception exception) {
-            throw new Exception(exception.getMessage());
-        }
-        finally {
-            closeRessources(null, statement, connection);
-        }
-    }
-
-    private String getRequeteUpdate(Maladie maladie) {
-        String sql = "UPDATE %s SET nom = '%s', description = '%s', idDepartement = %d WHERE id = %d";
-        return String.format(sql, table, maladie.getNom(), maladie.getDescription(), maladie.getIdDepartement(), maladie.getId());
+    public void update(BaseModele modele) throws Exception {
     }
 
     @Override
@@ -121,8 +113,8 @@ public class MaladieDao implements InterfaceDao {
         try {
             connection = getConnection();
             statement = connection.createStatement();
-            Maladie maladie = (Maladie) modele;
-            statement.executeUpdate(getRequeteSave(maladie));
+            Patient patient = (Patient) modele;
+            statement.executeUpdate(getRequeteSave(patient));
         }
         catch (Exception exception) {
             throw new Exception(exception.getMessage());
@@ -139,20 +131,14 @@ public class MaladieDao implements InterfaceDao {
     }
 
     @Override
-    public String getRequeteFindById(BaseModele modele) {
-        String sql = "SELECT * FROM %s WHERE id = %d";
-        return String.format(sql, table, modele.getId());
+    public String getRequeteFindAll(BaseModele modele) {
+        return null;
     }
 
     @Override
-    public String getRequeteDelete(BaseModele modele) {
-        String sql = "DELETE FROM %s WHERE id = %d";
+    public String getRequeteFindById(BaseModele modele) {
+        String sql = "SELECT * FROM %s WHERE id = %d";
         return String.format(sql, table, modele.getId());
-    }
-
-    private String getRequeteSave(Maladie maladie) {
-        String sql = "INSERT INTO %s VALUES('%s', '%s', %d)";
-        return String.format(sql, table, maladie.getNom(), maladie.getDescription(), maladie.getIdDepartement());
     }
 
     @Override
@@ -163,6 +149,24 @@ public class MaladieDao implements InterfaceDao {
             statement.close();
         if (connection != null)
             connection.close();
+    }
+
+    @Override
+    public String getRequeteDelete(BaseModele modele) {
+        String sql = "DELETE FROM %s WHERE id = %d";
+        return String.format(sql, table, modele.getId());
+    }
+
+    private String getRequeteDelete(Patient patient) {
+        String sql = "DELETE FROM %s WHERE id = %d";
+        sql = String.format(sql, table, patient.getId());
+        return sql;
+    }
+
+    private String getRequeteSave(Patient patient) {
+        String sql = "INSERT INTO %s VALUES('%s', '%s', '%s', '%s')";
+        sql = String.format(sql, table, patient.getNom(), patient.getPrenom(), new SimpleDateFormat("yyyy-MM-dd").format(patient.getDateNaissance()), patient.getSexe());
+        return sql;
     }
 
     @Override

@@ -40,8 +40,7 @@ public class DBConnection {
         this.setPass(pass);
     }
 
-    public DBConnection() {
-    }
+    public DBConnection() { }
 
     public String getJdbc() {
         return jdbc;

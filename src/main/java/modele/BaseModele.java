@@ -2,22 +2,27 @@ package modele;
 
 public class BaseModele {
     private Integer id;
+    private Integer etat;
 
     public BaseModele(Integer id) throws Exception {
         this.setId(id);
     }
 
-    public BaseModele() {
-    }
+    public BaseModele() {}
 
-    public Integer getId() {
+    public Integer getId(){
         return id;
     }
 
-    private void setId(Integer id) throws Exception {
-        if (id > 0)
-            this.id = id;
-        else
-            throw new Exception("Id négatif : " + id);
+    public void setId(Integer id) throws Exception {
+        this.id = id;
+    }
+
+    public void setEtat(Integer value){
+        this.etat = value;
+    }
+
+    public Integer getEtat(){
+        return this.etat;
     }
 }
