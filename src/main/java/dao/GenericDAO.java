@@ -84,7 +84,14 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
     public void delete(BaseModele modele) throws Exception {
-
+        try(Connection conn=UtilDAO.getConnection();
+        PreparedStatement statement= conn.prepareStatement(getRequeteDelete(modele))){
+            statement.setObject(1,modele.getId());
+            statement.executeUpdate();
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
@@ -116,7 +123,8 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
     public String getRequeteDelete(BaseModele modele) {
-        return null;
+        Table table = modele.getClass().getAnnotation(Table.class);
+        return String.format("delete from %s where id= ?", table.name());
     }
 
     @Override
