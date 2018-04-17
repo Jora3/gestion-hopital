@@ -1,12 +1,33 @@
 package modele;
 
+import annotations.Column;
+import annotations.Table;
+
 import java.sql.Date;
 
+@Table(name = "Patient")
 public class Patient extends BaseModele {
+    @Column(name = "nomPatient")
     private String nom;
     private String prenom;
     private Date dateNaissance;
     private String sexe;
+
+    public Patient(String table, String nom, String prenom, Date dateNaissance, String sexe) throws Exception {
+        super(table);
+        this.setNom(nom);
+        this.setPrenom(prenom);
+        this.setDateNaissance(dateNaissance);
+        this.setSexe(sexe);
+    }
+
+    public Patient(Integer id, String table, String nom, String prenom, Date dateNaissance, String sexe) throws Exception {
+        super(id, table);
+        this.setNom(nom);
+        this.setPrenom(prenom);
+        this.setDateNaissance(dateNaissance);
+        this.setSexe(sexe);
+    }
 
     public Patient(Integer id, String nom, String prenom, String dateNaissance, String sexe) throws Exception {
         super(id);
@@ -45,7 +66,7 @@ public class Patient extends BaseModele {
         return nom;
     }
 
-    private void setNom(String nom) throws Exception {
+    public void setNom(String nom) throws Exception {
         if (nom.isEmpty())
             throw new Exception("Nom de patient vide");
         else
@@ -56,7 +77,7 @@ public class Patient extends BaseModele {
         return prenom;
     }
 
-    private void setPrenom(String prenom) throws Exception {
+    public void setPrenom(String prenom) throws Exception {
         if (prenom.isEmpty())
             throw new Exception("Prenom de patient vide");
         else
@@ -71,7 +92,7 @@ public class Patient extends BaseModele {
 
     }
 
-    private void setDateNaissance(Date dateNaissance) {
+    public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 
@@ -79,8 +100,8 @@ public class Patient extends BaseModele {
         return sexe;
     }
 
-    private void setSexe(String sexe) throws Exception {
-        if (sexe.equals("H") || sexe.equals("F"))
+    public void setSexe(String sexe) throws Exception {
+        if (sexe.equals("H") || sexe.equals("F") || sexe.equals("M"))
             this.sexe = sexe;
         else
             throw new Exception("Sexe de patient invalide : " + sexe);

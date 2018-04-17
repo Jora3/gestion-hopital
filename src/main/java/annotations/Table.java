@@ -8,7 +8,7 @@ public @interface Table {
     /**
      * Nom de la table dans la base. default = NomClasse
      ** */
-    String name() default "";
+    String name();
 
     /**
      * Nom de la sequence dans la base asocie à la table. default = null

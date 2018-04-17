@@ -28,7 +28,7 @@ public class MaladieDAO implements InterfaceDAO {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(resultSet, statement, connection);
+            UtilDAO.closeRessources(resultSet, statement, connection);
         }
     }
 
@@ -50,7 +50,7 @@ public class MaladieDAO implements InterfaceDAO {
     }
 
     @Override
-    public BaseModele findById(BaseModele modele) throws Exception {
+    public void findById(BaseModele modele) throws Exception {
         ResultSet resultSet = null;
         try (
                 Connection connection = UtilDAO.getConnection();
@@ -58,26 +58,28 @@ public class MaladieDAO implements InterfaceDAO {
         ) {
             statement.setInt(1, modele.getId());
             resultSet = statement.executeQuery();
-            return  getResultById(resultSet);
+            getResultById((Maladie) modele, resultSet);
         }
         catch (Exception exception) {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(resultSet, null, null);
+            UtilDAO.closeRessources(resultSet, null, null);
         }
     }
 
-    private BaseModele getResultById(ResultSet resultSet) throws Exception {
-        Maladie maladie = null;
+    private void getResultById(Maladie maladie, ResultSet resultSet) throws Exception {
         if (resultSet.next()) {
             int id = resultSet.getInt(1),
                     idDepartement = resultSet.getInt(4);
             String nom = resultSet.getString(2),
                     description = resultSet.getString(3);
             maladie = new Maladie(id, nom, description, idDepartement);
+            maladie.setId(id);
+            maladie.setNom(nom);
+            maladie.setDescription(description);
+            maladie.setIdDepartement(idDepartement);
         }
-        return maladie;
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MaladieDAO implements InterfaceDAO {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(null, statement, connection);
+            UtilDAO.closeRessources(null, statement, connection);
         }
     }
 
@@ -136,15 +138,5 @@ public class MaladieDAO implements InterfaceDAO {
     @Override
     public String getRequeteDelete(BaseModele modele) {
         return null;
-    }
-
-    @Override
-    public void closeRessources(ResultSet resultSet, PreparedStatement statement, Connection connection) throws Exception {
-        if (resultSet != null)
-            resultSet.close();
-        if (statement != null)
-            statement.close();
-        if (connection != null)
-            connection.close();
     }
 }

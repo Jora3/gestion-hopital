@@ -2,10 +2,8 @@ package dao;
 
 import modele.BaseModele;
 import modele.Patient;
-import utils.Configuration;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class PatientDAO implements InterfaceDAO {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(resultSet, statement, connection);
+            UtilDAO.closeRessources(resultSet, statement, connection);
         }
     }
 
@@ -49,7 +47,7 @@ public class PatientDAO implements InterfaceDAO {
     }
 
     @Override
-    public BaseModele findById(BaseModele modele) throws Exception {
+    public void findById(BaseModele modele) throws Exception {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -58,27 +56,30 @@ public class PatientDAO implements InterfaceDAO {
             statement = connection.prepareStatement(getRequeteFindById(modele));
             statement.setInt(1, modele.getId());
             resultSet = statement.executeQuery();
-            return getResultById(resultSet);
+            getResultById((Patient) modele, resultSet);
         }
         catch (Exception exception) {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(resultSet, statement, connection);
+            UtilDAO.closeRessources(resultSet, statement, connection);
         }
     }
 
-    private BaseModele getResultById(ResultSet resultSet) throws Exception {
-        Patient patient = null;
+    private void getResultById(Patient patient, ResultSet resultSet) throws Exception {
         if (resultSet.next()) {
             Integer id = resultSet.getInt(1);
             String nom = resultSet.getNString(2),
                     prenom = resultSet.getString(3),
                     sexe = resultSet.getString(5);
             Date dateNaissance = resultSet.getDate(4);
-            patient = new Patient(id, nom, prenom, dateNaissance, sexe);
+            patient = new Patient();
+            patient.setId(id);
+            patient.setNom(nom);
+            patient.setPrenom(prenom);
+            patient.setSexe(sexe);
+            patient.setDateNaissance(dateNaissance);
         }
-        return patient;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class PatientDAO implements InterfaceDAO {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(null, statement, connection);
+            UtilDAO.closeRessources(null, statement, connection);
         }
     }
 
@@ -122,7 +123,7 @@ public class PatientDAO implements InterfaceDAO {
             throw new Exception(exception.getMessage());
         }
         finally {
-            closeRessources(null, statement, connection);
+            UtilDAO.closeRessources(null, statement, connection);
         }
     }
 
@@ -140,16 +141,6 @@ public class PatientDAO implements InterfaceDAO {
     public String getRequeteFindById(BaseModele modele) {
         String sql = "SELECT * FROM %s WHERE id = ?";
         return String.format(sql, modele.getTable());
-    }
-
-    @Override
-    public void closeRessources(ResultSet resultSet, PreparedStatement statement, Connection connection) throws Exception {
-        if (resultSet != null)
-            resultSet.close();
-        if (statement != null)
-            statement.close();
-        if (connection != null)
-            connection.close();
     }
 
     @Override

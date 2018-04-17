@@ -21,6 +21,6 @@ public class BaseService {
     }
 
     public BaseModele findById(BaseModele modele) throws Exception {
-        return genericDAO.findById(modele);
+        return null;//genericDAO.findById(modele);
     }
 }

@@ -1,6 +1,11 @@
 package modele;
 
+import annotations.Column;
+import annotations.Table;
+
+@Table(name = "Maladie")
 public class Maladie extends BaseModele {
+    @Column(name = "nom")
     private String nom;
     private String description;
     private Integer idDepartement;
@@ -25,7 +30,7 @@ public class Maladie extends BaseModele {
         return nom;
     }
 
-    private void setNom(String nom) throws Exception {
+    public void setNom(String nom) throws Exception {
         if (nom.isEmpty())
             throw new Exception("Nom de maladie vide");
         this.nom = nom;
@@ -35,7 +40,7 @@ public class Maladie extends BaseModele {
         return description;
     }
 
-    private void setDescription(String description) throws Exception {
+    public void setDescription(String description) throws Exception {
         if (description.isEmpty())
             throw new Exception("Description de maladie vide");
         this.description = description;
@@ -45,7 +50,7 @@ public class Maladie extends BaseModele {
         return idDepartement;
     }
 
-    private void setIdDepartement(Integer idDepartement) throws Exception {
+    public void setIdDepartement(Integer idDepartement) throws Exception {
         if (idDepartement > 0)
             this.idDepartement = idDepartement;
         else

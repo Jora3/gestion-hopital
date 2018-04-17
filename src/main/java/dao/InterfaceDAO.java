@@ -12,7 +12,7 @@ public interface InterfaceDAO {
 
     List<BaseModele> findAll(BaseModele baseModele) throws Exception;
 
-    BaseModele findById(BaseModele modele) throws Exception;
+    void findById(BaseModele modele) throws Exception;
     void delete(BaseModele modele) throws Exception;
     void update(BaseModele modele) throws Exception;
     void save(BaseModele modele) throws Exception;
@@ -22,5 +22,4 @@ public interface InterfaceDAO {
 
     String getRequeteFindById(BaseModele modele);
     String getRequeteDelete(BaseModele modele);
-    void closeRessources(ResultSet resultSet, PreparedStatement statement, Connection connection) throws Exception;
 }

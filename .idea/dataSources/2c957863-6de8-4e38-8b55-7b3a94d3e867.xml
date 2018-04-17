@@ -12,7 +12,8 @@
     </database>
     <schema id="4" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2018-04-16.19:49:44.692</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2018-04-17.16:01:55.379</IntrospectionTimestamp>
+      <IntrospectionStateNumber>552</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -31,5 +32,98 @@
     <schema id="9" parent="2" name="information_schema">
       <ObjectId>12113</ObjectId>
     </schema>
+    <sequence id="10" parent="4" name="maladie_id_seq">
+      <ObjectId>16399</ObjectId>
+      <StateNumber>546</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+      <BelongsToColumn>1</BelongsToColumn>
+    </sequence>
+    <sequence id="11" parent="4" name="patient_id_seq">
+      <ObjectId>16402</ObjectId>
+      <StateNumber>551</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+      <BelongsToColumn>1</BelongsToColumn>
+    </sequence>
+    <table id="12" parent="4" name="maladie">
+      <ObjectId>16394</ObjectId>
+      <StateNumber>545</StateNumber>
+    </table>
+    <table id="13" parent="4" name="patient">
+      <ObjectId>16404</ObjectId>
+      <StateNumber>551</StateNumber>
+    </table>
+    <column id="14" parent="12" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>547</StateNumber>
+      <SequenceName>maladie_id_seq</SequenceName>
+      <DefaultExpression>nextval(&apos;maladie_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="15" parent="12" name="nom">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <StateNumber>545</StateNumber>
+    </column>
+    <column id="16" parent="12" name="description">
+      <Position>3</Position>
+      <DataType>varchar(200)|0</DataType>
+      <StateNumber>549</StateNumber>
+    </column>
+    <column id="17" parent="12" name="iddepartement">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>545</StateNumber>
+    </column>
+    <index id="18" parent="12" name="maladie_pkey">
+      <ObjectId>16397</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="19" parent="12" name="maladie_pkey">
+      <ObjectId>16398</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>maladie_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="20" parent="13" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>551</StateNumber>
+      <SequenceName>patient_id_seq</SequenceName>
+      <DefaultExpression>nextval(&apos;patient_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="21" parent="13" name="nompatient">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <StateNumber>552</StateNumber>
+    </column>
+    <column id="22" parent="13" name="prenom">
+      <Position>3</Position>
+      <DataType>varchar(50)|0</DataType>
+      <StateNumber>551</StateNumber>
+    </column>
+    <column id="23" parent="13" name="datenaissance">
+      <Position>4</Position>
+      <DataType>date|0</DataType>
+      <StateNumber>551</StateNumber>
+    </column>
+    <column id="24" parent="13" name="sexe">
+      <Position>5</Position>
+      <DataType>char|0</DataType>
+      <StateNumber>551</StateNumber>
+    </column>
+    <index id="25" parent="13" name="patient_pkey">
+      <ObjectId>16408</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="26" parent="13" name="patient_pkey">
+      <ObjectId>16409</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>patient_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>

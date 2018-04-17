@@ -2,8 +2,16 @@ package modele;
 
 public class BaseModele {
     private Integer id;
-    private Integer etat;
     private String table;
+
+    public BaseModele(Integer id, String table) throws Exception {
+        this.setId(id);
+        this.setTable(table);
+    }
+
+    public BaseModele(String table) throws Exception {
+        this.setTable(table);
+    }
 
     public BaseModele(Integer id) throws Exception {
         this.setId(id);
@@ -21,19 +29,11 @@ public class BaseModele {
         this.id = id;
     }
 
-    public void setEtat(Integer value){
-        this.etat = value;
-    }
-
-    public Integer getEtat(){
-        return this.etat;
-    }
-
     public String getTable() {
         return table;
     }
 
-    public void setTable(String table) throws Exception {
+    private void setTable(String table) throws Exception {
         if (table.equals(""))
             throw new Exception("Nom de table vide");
         this.table = table;
