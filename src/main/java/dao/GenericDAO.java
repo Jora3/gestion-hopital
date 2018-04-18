@@ -99,6 +99,7 @@ public class GenericDAO implements InterfaceDAO {
     public void update(BaseModele modele) throws Exception {
         System.out.print(getRequeteUpdate(modele)); 
         ResultSet rs =  null;
+        Method m = null;
         try(Connection c = UtilDAO.getConnection();
             PreparedStatement st = c.prepareStatement(getRequeteUpdate(modele))){
             int i = 0;
@@ -113,10 +114,11 @@ public class GenericDAO implements InterfaceDAO {
                 else{ 
                     fields[i].set(modele, rs.getObject(fields[i].getName()));
                 }
-                st.setObject(i, fields[i].getName()); 
+                m = classes.getMethod("get" + Utilitaire.capitalize(fields[i].getName()));
+                st.setObject(i, m.invoke(modele)); 
             }
             st.setObject(i+1, modele.getId());
-            rs = st.executeQuery();
+            st.executeUpdate();
         }
 
     }
