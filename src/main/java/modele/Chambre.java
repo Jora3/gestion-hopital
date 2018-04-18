@@ -13,9 +13,7 @@ import annotations.Column;
 import annotations.Table;
 
 @Table(name = "chambre")
-public class Chambre extends BaseModele{
-
-   
+public class Chambre extends BaseModele{   
     private String numero;
     private int disponible;
 
