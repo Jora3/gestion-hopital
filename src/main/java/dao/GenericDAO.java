@@ -97,6 +97,27 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
     public void update(BaseModele modele) throws Exception {
+        System.out.print(getRequeteUpdate(modele)); 
+        ResultSet rs =  null;
+        try(Connection c = UtilDAO.getConnection();
+            PreparedStatement st = c.prepareStatement(getRequeteUpdate(modele))){
+            int i = 0;
+            Class classes = modele.getClass();
+            Field[]   fields  = columnsTable(classes.getDeclaredFields());
+            for(i = 1; i<fields.length; i++){
+                fields[i].setAccessible(true);
+                Column column = fields[i].getAnnotation(Column.class);
+                if(column != null){ 
+                  fields[i].set(modele, rs.getObject(column.name()));
+                }
+                else{ 
+                    fields[i].set(modele, rs.getObject(fields[i].getName()));
+                }
+                st.setObject(i, fields[i].getName()); 
+            }
+            st.setObject(i+1, modele.getId());
+            rs = st.executeQuery();
+        }
 
     }
 
@@ -175,6 +196,17 @@ public class GenericDAO implements InterfaceDAO {
     public String getRequeteFindById(BaseModele modele) {
         Table table = modele.getClass().getAnnotation(Table.class);
         return String.format("select * from %s where id = ?", table.name());
+    }
+      public String getRequeteUpdate(BaseModele modele) {
+        Class classes = modele.getClass();
+        Table table = modele.getClass().getAnnotation(Table.class);
+        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
+        String values = "";
+        for(Field f : fields){
+            values += ","+f.getName()+" = ?";
+        }
+        values = values.replaceFirst(",", ""); 
+        return String.format("update %s set %s where id = ?", table.name(), values);
     }
 
     @Override
