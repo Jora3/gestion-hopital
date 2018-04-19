@@ -97,16 +97,13 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
      public void update(BaseModele modele) throws Exception {
-        Method m = null;
-        try(Connection c = UtilDAO.getConnection();
+         try(Connection c = UtilDAO.getConnection();
             PreparedStatement st = c.prepareStatement(getRequeteUpdate(modele))){
             int i = 1;
-            Class classes = modele.getClass();
-            Field[]   fields  = columnsTable(classes.getDeclaredFields());
+            Field[]   fields  = columnsTable(modele.getClass().getDeclaredFields());
             for(Field field : fields){
                 field.setAccessible(true);
-                m = classes.getMethod("get" + Utilitaire.capitalize(field.getName()));
-                st.setObject(i, m.invoke(modele));
+                st.setObject(i, field.get(modele));
                 i++;
             }
             st.setObject(i, modele.getId());
