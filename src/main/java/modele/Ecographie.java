@@ -42,4 +42,12 @@ public class Ecographie extends BaseModele {
     public String getAndrana() {
         return andrana;
     }
+
+    public Ecographie(){}
+
+    public Ecographie(String type_eco, String nom_eco, String gravite_eco){
+        this.type_eco = type_eco;
+        this.nom_eco = nom_eco;
+        this.gravite_eco = gravite_eco;
+    }
 }
