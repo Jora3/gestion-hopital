@@ -16,7 +16,10 @@ import java.util.List;
 
 public class GenericDAO implements InterfaceDAO {
 
-    public static boolean isAnd = true;
+    private String pagination(int nPage, int nDonne) {
+        int offSet = nPage * nDonne;
+        return String.format("limit %d offset %d", nDonne, offSet);
+    }
 
     private String where(BaseModele modele, boolean isAnd) throws IllegalAccessException {
         StringBuilder request  = new StringBuilder();
@@ -79,8 +82,9 @@ public class GenericDAO implements InterfaceDAO {
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
         ResultSet rs = null;
-        String q = getRequeteFindAll(baseModele), aWhere = where(baseModele, isAnd);
-        q += aWhere;
+        String q = getRequeteFindAll(baseModele), aWhere = where(baseModele, true), pagination = pagination(1, 20);
+        q += aWhere + pagination;
+        System.out.println(q);
         try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(q)) {
             if(!aWhere.equals("")){

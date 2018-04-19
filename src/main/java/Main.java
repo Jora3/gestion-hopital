@@ -1,6 +1,5 @@
 import dao.GenericDAO;
 import modele.BaseModele;
-import modele.Ecographie;
 import modele.Patient;
 import java.sql.Date;
 import java.util.List;
