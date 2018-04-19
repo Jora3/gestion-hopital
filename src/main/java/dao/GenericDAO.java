@@ -16,6 +16,8 @@ import java.util.List;
 
 public class GenericDAO implements InterfaceDAO {
 
+    public static boolean isAnd = true;
+
     private String where(BaseModele modele, boolean isAnd) throws IllegalAccessException {
         StringBuilder request  = new StringBuilder();
         String        condition = "or ";
@@ -77,7 +79,7 @@ public class GenericDAO implements InterfaceDAO {
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
         ResultSet rs = null;
-        String q = getRequeteFindAll(baseModele), aWhere = where(baseModele, true);
+        String q = getRequeteFindAll(baseModele), aWhere = where(baseModele, isAnd);
         q += aWhere;
         try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(q)) {
