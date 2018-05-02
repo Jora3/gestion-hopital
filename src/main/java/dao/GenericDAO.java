@@ -4,7 +4,6 @@ import annotations.Column;
 import annotations.NotColumn;
 import annotations.Table;
 import modele.BaseModele;
-import utils.Configuration;
 import utils.Utilitaire;
 
 import java.lang.reflect.Field;
@@ -12,7 +11,6 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class GenericDAO implements InterfaceDAO {
         try {
             Class classes = modele.getClass();
             Field[]   fields  = columnsTable(classes.getDeclaredFields());
-            while (rs.next()){
+            while (rs.next()) {
                 modele = modele.getClass().newInstance();
                 modele.setId(rs.getInt("id"));
                 for(Field f : fields){
@@ -47,6 +45,10 @@ public class GenericDAO implements InterfaceDAO {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
+    }
+
+    private void setObjectModel(BaseModele model) {
+
     }
 
     @Override
@@ -110,7 +112,7 @@ public class GenericDAO implements InterfaceDAO {
                 i++;
             }
             st.setObject(i, modele.getId());
-            System.out.print(getRequeteUpdate(modele)); 
+            System.out.print(getRequeteUpdate(modele));
             st.executeUpdate();
         }
 
@@ -131,11 +133,12 @@ public class GenericDAO implements InterfaceDAO {
         }
     }
 
+    @SuppressWarnings(value = {"unchecked"})
     private void setParamsSave(PreparedStatement statement, BaseModele modele) throws Exception {
         Class classe = modele.getClass();
         Field[] fields = columnsTable(classe.getDeclaredFields());
         int i = 1;
-        Method method = null;
+        Method method;
         for (Field field : fields) {
             method = classe.getMethod("get" + Utilitaire.capitalize(field.getName()));
             statement.setObject(i, method.invoke(modele));
@@ -145,6 +148,7 @@ public class GenericDAO implements InterfaceDAO {
 
     private String getRequeteSave(BaseModele modele) throws Exception {
         String sql = "INSERT INTO %s (%s) VALUES(%s)";
+        System.out.println(String.format(sql, getTable(modele), getColumns(modele), getParams(modele)));
         return String.format(sql, getTable(modele), getColumns(modele), getParams(modele));
     }
 
