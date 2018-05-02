@@ -1,14 +1,9 @@
 package dao;
 
 import modele.BaseModele;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 public interface InterfaceDAO {
-
 
     List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception;
 
@@ -17,6 +12,7 @@ public interface InterfaceDAO {
     /**
      * select * from Table where column1 = value1 and ... column = valueN;
      * default find strict = true; condition = and;
+     * @Object GenericDAO
      * */
     List<BaseModele> findAll(BaseModele baseModele) throws Exception;
 

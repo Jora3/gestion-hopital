@@ -1,5 +1,6 @@
-package dao;
+package dao.modele;
 
+import dao.InterfaceDAO;
 import modele.BaseModele;
 import modele.Patient;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -31,17 +32,17 @@ public class PatientDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public List<BaseModele> findAll(BaseModele modele, boolean strict) throws Exception {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
-        return null;
+        throw new NotImplementedException();
     }
 
     private List<BaseModele> getResultAllPatients(ResultSet resultSet) throws Exception {

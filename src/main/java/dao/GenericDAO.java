@@ -3,6 +3,7 @@ package dao;
 import annotations.Column;
 import annotations.NotColumn;
 import annotations.Table;
+import dao.modele.UtilDAO;
 import modele.BaseModele;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.Utilitaire;
