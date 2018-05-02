@@ -69,11 +69,16 @@ public class HibernateDAO implements InterfaceDAO{
         Criteria criteria = session.createCriteria(modele.getClass());
         criteria.add(Restrictions.eq("id", modele.getId()));
         List<BaseModele> modeles = criteria.list();
+        if(modeles.size() != 0) modele = modeles.get(0);
     }
 
     @Override
-    public void findById(BaseModele modele) {
-
+    public void findById(BaseModele modele) throws Exception {
+        try(Session session = factory.openSession()){
+            findById(modele, session);
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
