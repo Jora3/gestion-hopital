@@ -2,12 +2,10 @@ package dao;
 
 import modele.BaseModele;
 import modele.Maladie;
-import utils.Configuration;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +44,16 @@ public class MaladieDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
         return null;
     }
 

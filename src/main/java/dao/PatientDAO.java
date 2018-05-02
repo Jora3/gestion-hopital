@@ -2,6 +2,7 @@ package dao;
 
 import modele.BaseModele;
 import modele.Patient;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,7 +31,17 @@ public class PatientDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
-        return null;
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict) throws Exception {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
+        throw new NotImplementedException();
     }
 
     private List<BaseModele> getResultAllPatients(ResultSet resultSet) throws Exception {
@@ -103,6 +114,7 @@ public class PatientDAO implements InterfaceDAO {
 
     @Override
     public void update(BaseModele modele) throws Exception {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -134,7 +146,7 @@ public class PatientDAO implements InterfaceDAO {
 
     @Override
     public String getRequeteFindAll(BaseModele modele) {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
