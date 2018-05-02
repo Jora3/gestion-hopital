@@ -2,6 +2,7 @@ package essaie;
 
 import dao.GenericDAO;
 import modele.BaseModele;
+import modele.Mouvement;
 
 import java.util.List;
 
@@ -22,5 +23,13 @@ public class BaseService {
 
     public BaseModele findById(BaseModele modele) throws Exception {
         return null;//genericDAO.findById(modele);
+    }
+
+    public void saveMouvement(Mouvement mouvement){
+        try {
+            genericDAO.save(mouvement);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -4,6 +4,7 @@ import annotations.Column;
 import annotations.NotColumn;
 import annotations.Table;
 import modele.BaseModele;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.Utilitaire;
 
 import java.lang.reflect.Field;
@@ -17,8 +18,15 @@ import java.util.List;
 public class GenericDAO implements InterfaceDAO {
 
     private String pagination(int nPage, int nDonne) {
-        int offSet = nPage * nDonne;
+        int offSet = (nPage - 1) * nDonne + 1;
         return String.format("limit %d offset %d", nDonne, offSet);
+    }
+
+    private String nomTable(BaseModele modele) throws Exception {
+        Table table = modele.getClass().getAnnotation(Table.class);
+        if(table == null)
+            throw new Exception(String.format("Objet de type : %s n'est pas associé à une table", modele.getClass()));
+        return table.name();
     }
 
     private String where(BaseModele modele, boolean isAnd) throws IllegalAccessException {
@@ -39,7 +47,6 @@ public class GenericDAO implements InterfaceDAO {
             request.delete(taille - 5, taille - 1);
             request = new StringBuilder(" where "+request);
         }
-        System.out.println(request.toString());
         return request.toString();
     }
 
@@ -49,6 +56,27 @@ public class GenericDAO implements InterfaceDAO {
             if(field.getAnnotation(NotColumn.class) == null) listColumns.add(field);
         }
         return listColumns.toArray(new Field[0]);
+    }
+
+    private String getColumns(BaseModele modele) {
+        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
+        StringBuilder columns = new StringBuilder();
+        for (Field field : fields) {
+            Column column = field.getAnnotation(Column.class);
+            if (column != null)
+                columns.append(column.name()).append(",");
+            else
+                columns.append(field.getName()).append(",");
+        }
+        return columns.substring(0, columns.length()-1);
+    }
+
+    private String getParams(BaseModele modele) {
+        int nbColumns = columnsTable(modele.getClass().getDeclaredFields()).length;
+        StringBuilder params = new StringBuilder();
+        for (int i = 0; i < nbColumns; i++)
+            params.append("?,");
+        return params.substring(0, params.length()-1);
     }
 
     private List<BaseModele> list(BaseModele modele, ResultSet rs) throws Exception {
@@ -75,37 +103,47 @@ public class GenericDAO implements InterfaceDAO {
     }
 
     @Override
-    public List<BaseModele> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<BaseModele> findAll(BaseModele baseModele) throws Exception {
+    public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
         ResultSet rs = null;
-        String q = getRequeteFindAll(baseModele), aWhere = where(baseModele, true), pagination = pagination(1, 20);
+        String q = getRequeteFindAll(modele), aWhere = where(modele, strict), pagination = pagination(page, nbDonne);
         q += aWhere + pagination;
         System.out.println(q);
         try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(q)) {
             if(!aWhere.equals("")){
-                Field[] fields = columnsTable(baseModele.getClass().getDeclaredFields());
+                Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
                 int     i      = 1;
                 for (Field field : fields) {
                     field.setAccessible(true);
-                    Object o = field.get(baseModele);
+                    Object o = field.get(modele);
                     if(o != null){
                         statement.setObject(i, o);
                         i++;
                     }
                 }
             }
-            return list(baseModele, rs = statement.executeQuery());
+            return list(modele, rs = statement.executeQuery());
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }finally {
             UtilDAO.closeRessources(rs, null, null);
         }
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict) throws Exception {
+        return findAll(modele, strict, 1, 20);
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele) throws Exception {
+        return findAll(modele, true, 1, 20);
+    }
+
+    @Override
+    public List<BaseModele> findAll() {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -187,35 +225,7 @@ public class GenericDAO implements InterfaceDAO {
 
     private String getRequeteSave(BaseModele modele) throws Exception {
         String sql = "INSERT INTO %s (%s) VALUES(%s)";
-        return String.format(sql, getTable(modele), getColumns(modele), getParams(modele));
-    }
-
-    private String getTable(BaseModele modele) throws Exception {
-        if (modele.getTable() != null)
-            return modele.getTable();
-        Table table = modele.getClass().getAnnotation(Table.class);
-        return table.name();
-    }
-
-    private String getColumns(BaseModele modele) {
-        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
-        StringBuilder columns = new StringBuilder();
-        for (Field field : fields) {
-            Column column = field.getAnnotation(Column.class);
-            if (column != null)
-                columns.append(column.name()).append(",");
-            else
-                columns.append(field.getName()).append(",");
-        }
-        return columns.substring(0, columns.length()-1);
-    }
-
-    private String getParams(BaseModele modele) {
-        int nbColumns = columnsTable(modele.getClass().getDeclaredFields()).length;
-        StringBuilder params = new StringBuilder();
-        for (int i = 0; i < nbColumns; i++)
-            params.append("?,");
-        return params.substring(0, params.length()-1);
+        return String.format(sql, nomTable(modele), getColumns(modele), getParams(modele));
     }
 
     @Override
@@ -224,31 +234,27 @@ public class GenericDAO implements InterfaceDAO {
     }
 
     @Override
-    public String getRequeteFindAll(BaseModele modele) {
-        Table table = modele.getClass().getAnnotation(Table.class);
-        return String.format("select * from %s", table.name());
+    public String getRequeteFindAll(BaseModele modele) throws Exception {
+        return String.format("select * from %s", nomTable(modele));
     }
 
     @Override
-    public String getRequeteFindById(BaseModele modele) {
-        Table table = modele.getClass().getAnnotation(Table.class);
-        return String.format("select * from %s where id = ?", table.name());
+    public String getRequeteFindById(BaseModele modele) throws Exception {
+        return String.format("select * from %s where id = ?", nomTable(modele));
     }
-      public String getRequeteUpdate(BaseModele modele) {
-        Class classes = modele.getClass();
-        Table table = modele.getClass().getAnnotation(Table.class);
-        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
-        String values = "";
+
+    private String getRequeteUpdate(BaseModele modele) throws Exception {
+        Field[]       fields = columnsTable(modele.getClass().getDeclaredFields());
+        StringBuilder values = new StringBuilder();
         for(Field f : fields){
-            values += ","+f.getName()+" = ?";
+            values.append(",").append(f.getName()).append(" = ?");
         }
-        values = values.replaceFirst(",", ""); 
-        return String.format("update %s set %s where id = ?", table.name(), values);
+          values = new StringBuilder(values.toString().replaceFirst(",", ""));
+        return String.format("update %s set %s where id = ?", nomTable(modele), values.toString());
     }
 
     @Override
-    public String getRequeteDelete(BaseModele modele) {
-        Table table = modele.getClass().getAnnotation(Table.class);
-        return String.format("delete from %s where id= ?", table.name());
+    public String getRequeteDelete(BaseModele modele) throws Exception {
+        return String.format("delete from %s where id= ?", nomTable(modele));
     }
 }

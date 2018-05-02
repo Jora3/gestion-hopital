@@ -50,6 +50,16 @@ public class MaladieDAO implements InterfaceDAO {
     }
 
     @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
+        return null;
+    }
+
+    @Override
     public void findById(BaseModele modele) throws Exception {
         ResultSet resultSet = null;
         try (
