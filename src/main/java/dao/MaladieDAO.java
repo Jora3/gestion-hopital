@@ -1,6 +1,5 @@
-package dao.modele;
+package dao;
 
-import dao.InterfaceDAO;
 import modele.BaseModele;
 import modele.Maladie;
 

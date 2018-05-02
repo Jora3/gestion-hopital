@@ -1,6 +1,5 @@
-package dao.modele;
+package dao;
 
-import dao.connection.DBConnection;
 import utils.Configuration;
 
 import java.sql.Connection;
