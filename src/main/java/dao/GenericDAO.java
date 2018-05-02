@@ -3,7 +3,6 @@ package dao;
 import annotations.Column;
 import annotations.NotColumn;
 import annotations.Table;
-import dao.modele.UtilDAO;
 import modele.BaseModele;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.Utilitaire;
@@ -16,6 +15,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("All")
 public class GenericDAO implements InterfaceDAO {
 
     private String pagination(int nPage, int nDonne) {

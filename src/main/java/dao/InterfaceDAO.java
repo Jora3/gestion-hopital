@@ -11,7 +11,7 @@ public interface InterfaceDAO {
 
     /**
      * select * from Table where column1 = value1 and ... column = valueN;
-     * default find strict = true; condition = and;
+     * default list strict = true; condition = and;
      * @Object GenericDAO
      * */
     List<BaseModele> findAll(BaseModele baseModele) throws Exception;
