@@ -25,8 +25,11 @@ public class GenericDAO implements InterfaceDAO {
 
     private String nomTable(BaseModele modele) throws Exception {
         Table table = modele.getClass().getAnnotation(Table.class);
-        if(table == null)
-            throw new Exception(String.format("Objet de type : %s n'est pas associé à une table", modele.getClass()));
+        if(table == null){
+            if(modele.getTable() == null)
+                throw new Exception(String.format("Objet de type : %s n'est pas associé à une table", modele.getClass()));
+            return modele.getTable();
+        }
         return table.name();
     }
 

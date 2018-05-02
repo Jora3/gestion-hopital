@@ -11,6 +11,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
+@SuppressWarnings("All")
 public class HibernateDAO implements InterfaceDAO{
     private SessionFactory factory;
 
@@ -26,12 +27,10 @@ public class HibernateDAO implements InterfaceDAO{
         session.delete(modele);
     }
 
-    @SuppressWarnings("All")
     public List<BaseModele> list(Criteria criteria){
         return criteria.list();
     }
 
-    @SuppressWarnings("All")
     public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne, Session session) throws Exception {
         try{
             int minSet = (page - 1) * nbDonne + 1;
@@ -64,6 +63,12 @@ public class HibernateDAO implements InterfaceDAO{
     @Override
     public List<BaseModele> findAll(BaseModele modele) throws Exception {
         return findAll(modele, true, 1, 20);
+    }
+
+    public void findById(BaseModele modele, Session session){
+        Criteria criteria = session.createCriteria(modele.getClass());
+        criteria.add(Restrictions.eq("id", modele.getId()));
+        List<BaseModele> modeles = criteria.list();
     }
 
     @Override
