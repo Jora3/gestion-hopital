@@ -1,0 +1,51 @@
+<component name="libraryTable">
+  <library name="javadocs">
+    <CLASSES />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/documentation/javadocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/integrationguide/chapters/services/extras" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/integrationguide/chapters/services/extras/extend" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/integrationguide/chapters/services/extras/override" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/annotations/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/basic/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/entitymanager/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/envers/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/osgi/managed-jpa/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/osgi/unmanaged-jpa/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/asciidoc/quickstart/tutorials/osgi/unmanaged-native/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/documentation/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-c3p0/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-c3p0/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-core/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-core/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-ehcache/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-ehcache/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-envers/src/demo/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-envers/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-envers/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-hikaricp/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-hikaricp/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-infinispan/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-infinispan/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-jcache/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-jcache/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-orm-modules/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-osgi/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-osgi/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-proxool/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-proxool/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-spatial/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-spatial/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-testing/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/hibernate-testing/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/tooling/hibernate-enhance-maven-plugin/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/tooling/hibernate-enhance-maven-plugin/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/tooling/hibernate-gradle-plugin/src/main/groovy" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/tooling/metamodel-generator/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/hibernate-release-5.2.17.Final.zip!/hibernate-release-5.2.17.Final/project/tooling/metamodel-generator/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

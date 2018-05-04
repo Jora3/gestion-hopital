@@ -39,7 +39,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Hibernate" level="project" />
+    <orderEntry type="library" exported="" name="Hibernate" level="project" />
+    <orderEntry type="library" exported="" name="javadocs" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
     <orderEntry type="library" name="Maven: javax:javaee-web-api:6.0" level="project" />
   </component>
 </module>

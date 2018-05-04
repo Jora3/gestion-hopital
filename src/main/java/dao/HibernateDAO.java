@@ -12,7 +12,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 @SuppressWarnings("All")
-public class HibernateDAO implements InterfaceDAO{
+public class HibernateDAO implements InterfaceDAO {
     private SessionFactory factory;
 
     public void save(BaseModele modele, Session session){
@@ -41,7 +41,7 @@ public class HibernateDAO implements InterfaceDAO{
             if(!strict) criteria.add(Restrictions.disjunction());
             criteria.add(Example.create(modele));
             return list(criteria);
-        }catch (Exception e){
+        }catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
@@ -50,7 +50,7 @@ public class HibernateDAO implements InterfaceDAO{
     public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
         try(Session session = factory.openSession()){
             return findAll(modele, strict, page, nbDonne, session);
-        }catch (Exception e){
+        }catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }

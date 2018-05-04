@@ -111,7 +111,6 @@ public class GenericDAO implements InterfaceDAO {
         ResultSet rs = null;
         String q = getRequeteFindAll(modele), aWhere = where(modele, strict), pagination = pagination(page, nbDonne);
         q += aWhere + pagination;
-        System.out.println(q);
         try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(q)) {
             if(!aWhere.equals("")){
@@ -169,7 +168,7 @@ public class GenericDAO implements InterfaceDAO {
 
     @Override
     public void delete(BaseModele modele) throws Exception {
-        try(Connection conn=UtilDAO.getConnection();
+        try(Connection conn = UtilDAO.getConnection();
         PreparedStatement statement= conn.prepareStatement(getRequeteDelete(modele))){
             statement.setObject(1,modele.getId());
             statement.executeUpdate();
@@ -204,7 +203,6 @@ public class GenericDAO implements InterfaceDAO {
             PreparedStatement statement = connection.prepareStatement(getRequeteSave(modele))
             ) {
             setParamsSave(statement, modele);
-            System.out.println(statement);
             statement.executeUpdate();
         }
         catch (Exception exception) {

@@ -82,7 +82,6 @@ public class MaladieDAO implements InterfaceDAO {
                     idDepartement = resultSet.getInt(4);
             String nom = resultSet.getString(2),
                     description = resultSet.getString(3);
-            maladie = new Maladie(id, nom, description, idDepartement);
             maladie.setId(id);
             maladie.setNom(nom);
             maladie.setDescription(description);
