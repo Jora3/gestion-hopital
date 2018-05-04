@@ -84,7 +84,6 @@ public class PatientDAO implements InterfaceDAO {
                     prenom = resultSet.getString(3),
                     sexe = resultSet.getString(5);
             Date dateNaissance = resultSet.getDate(4);
-            patient = new Patient();
             patient.setId(id);
             patient.setNom(nom);
             patient.setPrenom(prenom);
