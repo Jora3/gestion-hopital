@@ -12,22 +12,25 @@ import java.sql.Date;
  * @author Nathalie Andrandrain
  */
 import annotations.Column;
+import annotations.NotColumn;
 import annotations.Table;
 
 @Table(name = "mouvement")
 public class Mouvement extends BaseModele{
-private int patient;
+@Column(name = "patient")
+private int malade;
 private int service;
 private int chambre;
 private Date dateEntre;
 private Date dateSortie;
+@NotColumn private String remarque;
 
     public Mouvement() {
     }
 
     public Mouvement(int patient, int service, int chambre, Date dateEntre, Date dateSortie, Integer id) throws Exception {
         super(id);
-        this.patient = patient;
+        this.malade = patient;
         this.service = service;
         this.chambre = chambre;
         this.dateEntre = dateEntre;
@@ -35,7 +38,7 @@ private Date dateSortie;
     }
     
     public Mouvement(int patient, int service, int chambre, Date dateEntre, Date dateSortie) {
-        this.patient = patient;
+        this.malade = patient;
         this.service = service;
         this.chambre = chambre;
         this.dateEntre = dateEntre;
@@ -43,7 +46,7 @@ private Date dateSortie;
     }
 
     public int getPatient() {
-        return patient;
+        return malade;
     }
 
     public int getService() {
@@ -63,7 +66,7 @@ private Date dateSortie;
     }
 
     public void setPatient(int patient) {
-        this.patient = patient;
+        this.malade = patient;
     }
 
     public void setService(int service) {

@@ -10,27 +10,30 @@ package modele;
  * @author Nathalie Andrandrain
  */
 import annotations.Column;
+import annotations.NotColumn;
 import annotations.Table;
 
 @Table(name = "chambre")
-public class Chambre extends BaseModele{   
-    private String numero;
+public class Chambre extends BaseModele{ 
+    @Column(name = "numero")
+    private String numeroChambre;
     private int disponible;
-
+    @NotColumn private String hotel;
+    
     public Chambre() {
     }
      public Chambre(String numero, int disponible, Integer id) throws Exception {
         super(id);
-        this.numero = numero;
+        this.numeroChambre = numero;
         this.disponible = disponible;
     }
     public Chambre(String numero, int disponible) {
-        this.numero = numero;
+        this.numeroChambre = numero;
         this.disponible = disponible;
     }
     
     public String getNumero() {
-        return numero;
+        return numeroChambre;
     }
 
 
@@ -39,7 +42,7 @@ public class Chambre extends BaseModele{
     }
 
     public void setNumero(String numero) {
-        this.numero = numero;
+        this.numeroChambre = numero;
     }
     public void setDisponible(int disponible) {
         this.disponible = disponible;

@@ -6,6 +6,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="gestion-hopital" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: javax:javaee-web-api:6.0" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/gestion-hopital-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
