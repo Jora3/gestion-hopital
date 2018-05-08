@@ -1,7 +1,12 @@
 package modele;
 
-public class BaseModele {
+import annotations.NotColumn;
+
+import java.io.Serializable;
+
+public class BaseModele implements Serializable {
     private Integer id;
+    @NotColumn
     private String table;
 
     public BaseModele(Integer id, String table) throws Exception {
@@ -33,7 +38,7 @@ public class BaseModele {
         return table;
     }
 
-    private void setTable(String table) throws Exception {
+    public void setTable(String table) throws Exception {
         if (table.equals(""))
             throw new Exception("Nom de table vide");
         this.table = table;

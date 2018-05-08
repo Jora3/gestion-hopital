@@ -4,19 +4,20 @@ import annotations.NotColumn;
 import annotations.Relation;
 import annotations.Table;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Table(name = "Consultation")
-public class Consultation extends BaseModele {
+public class Consultation extends BaseModele implements Serializable {
     private Date dateConsultation;
     private Integer idMedecin;
     private Integer idPatient;
 
-    @Relation(get = true)
+    @Relation
     @NotColumn
-    private Medecin medecin;
+    private transient Medecin medecin;
     @NotColumn
-    private Patient patient;
+    private transient Patient patient;
 
     public Medecin getMedecin() {
         return medecin;

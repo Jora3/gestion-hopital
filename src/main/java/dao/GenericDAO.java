@@ -2,11 +2,15 @@ package dao;
 
 import annotations.Column;
 import annotations.NotColumn;
+import annotations.Relation;
 import annotations.Table;
 import modele.BaseModele;
+import modele.Medecin;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.Utilitaire;
 
+import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -19,8 +23,8 @@ import java.util.List;
 public class GenericDAO implements InterfaceDAO {
 
     private String pagination(int nPage, int nDonne) {
-        int offSet = (nPage - 1) * nDonne + 1;
-        return String.format("limit %d offset %d", nDonne, offSet);
+        int offSet = (nPage - 1) * nDonne;
+        return String.format(" limit %d offset %d", nDonne, offSet);
     }
 
     private String nomTable(BaseModele modele) throws Exception {
@@ -86,6 +90,8 @@ public class GenericDAO implements InterfaceDAO {
     private List<BaseModele> list(BaseModele modele, ResultSet rs) throws Exception {
         List<BaseModele> modeleList = new ArrayList<>();
         try {
+            if (cacheExist(modele))
+                return deserialiserAll(modele);
             Class classes = modele.getClass();
             Field[]   fields  = columnsTable(classes.getDeclaredFields());
             while (rs.next()){
@@ -99,10 +105,54 @@ public class GenericDAO implements InterfaceDAO {
                 }
                 modeleList.add(modele);
             }
+            serialiserAll(modele, modeleList);
             return modeleList;
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
+        }
+    }
+
+    private void serialiserAll(BaseModele modele, List<BaseModele> modeles) throws Exception {
+        FileOutputStream fichier = null;
+        ObjectOutputStream stream = null;
+        try {
+            String nomFichier = "cache/All" + modele.getClass().getSimpleName() + ".ser";
+            fichier = new FileOutputStream(nomFichier);
+            stream = new ObjectOutputStream(fichier);
+            stream.writeObject(modeles);
+            stream.flush();
+        } catch (Exception exception) {
+            throw exception;
+        } finally {
+            if (fichier != null)
+                fichier.close();
+            if (stream != null)
+                stream.close();
+        }
+    }
+
+    private boolean cacheExist(BaseModele modele) {
+        String filePath = "cache/All" + modele.getClass().getSimpleName() + ".ser";
+        File file = new File(filePath);
+        return file.exists() && file.isFile();
+    }
+
+    private List<BaseModele> deserialiserAll(BaseModele modele) throws Exception {
+        FileInputStream fichier = null;
+        ObjectInputStream stream = null;
+        try {
+            String nomFichier = "cache/All" + modele.getClass().getSimpleName() + ".ser";
+            fichier = new FileInputStream(nomFichier);
+            stream = new ObjectInputStream(fichier);
+            return (List<BaseModele>) stream.readObject();
+        } catch (Exception exception) {
+            throw exception;
+        } finally {
+            if (fichier != null)
+                fichier.close();
+            if (stream != null)
+                stream.close();
         }
     }
 
@@ -166,12 +216,18 @@ public class GenericDAO implements InterfaceDAO {
         }
     }
 
+    private void removeCache(BaseModele modele) {
+        String filePath = "cache/All" + modele.getClass().getSimpleName() + ".ser";
+        (new File(filePath)).delete();
+    }
+
     @Override
     public void delete(BaseModele modele) throws Exception {
         try(Connection conn = UtilDAO.getConnection();
         PreparedStatement statement= conn.prepareStatement(getRequeteDelete(modele))){
             statement.setObject(1,modele.getId());
             statement.executeUpdate();
+            removeCache(modele);
         }catch(Exception e){
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -190,10 +246,9 @@ public class GenericDAO implements InterfaceDAO {
                 i++;
             }
             st.setObject(i, modele.getId());
-            System.out.print(getRequeteUpdate(modele)); 
             st.executeUpdate();
+             removeCache(modele);
         }
-
     }
 
     @Override
@@ -204,6 +259,7 @@ public class GenericDAO implements InterfaceDAO {
             ) {
             setParamsSave(statement, modele);
             statement.executeUpdate();
+            removeCache(modele);
         }
         catch (Exception exception) {
             throw new Exception(exception.getMessage());
