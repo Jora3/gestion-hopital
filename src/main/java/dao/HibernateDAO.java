@@ -5,6 +5,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -14,6 +15,19 @@ import java.util.List;
 @SuppressWarnings("All")
 public class HibernateDAO implements InterfaceDAO {
     private SessionFactory factory;
+
+    public HibernateDAO(){
+        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+        factory = configuration.buildSessionFactory();
+    }
+
+    public SessionFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(SessionFactory factory) {
+        this.factory = factory;
+    }
 
     public void save(BaseModele modele, Session session){
         session.save(modele);
@@ -33,7 +47,7 @@ public class HibernateDAO implements InterfaceDAO {
 
     public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne, Session session) throws Exception {
         try{
-            int minSet = (page - 1) * nbDonne + 1;
+            int minSet = (page - 1) * nbDonne;
             int maxSet = page * nbDonne;
             Criteria criteria = session.createCriteria(modele.getClass());
             criteria.setFirstResult(minSet);
@@ -48,10 +62,13 @@ public class HibernateDAO implements InterfaceDAO {
 
     @Override
     public List<BaseModele> findAll(BaseModele modele, boolean strict, int page, int nbDonne) throws Exception {
-        try(Session session = factory.openSession()){
-            return findAll(modele, strict, page, nbDonne, session);
+        Session session = null;
+        try{
+            return findAll(modele, strict, page, nbDonne, session= factory.openSession());
         }catch (Exception e) {
             throw new Exception(e.getMessage());
+        }finally {
+            if(session != null) session.close();
         }
     }
 
@@ -68,55 +85,69 @@ public class HibernateDAO implements InterfaceDAO {
     public void findById(BaseModele modele, Session session){
         Criteria criteria = session.createCriteria(modele.getClass());
         criteria.add(Restrictions.eq("id", modele.getId()));
-        List<BaseModele> modeles = criteria.list();
-        if(modeles.size() != 0) modele = modeles.get(0);
+        modele = (BaseModele) criteria.uniqueResult();
     }
 
     @Override
     public void findById(BaseModele modele) throws Exception {
-        try(Session session = factory.openSession()){
-            findById(modele, session);
+        Session session = null;
+        try{
+            findById(modele, session = factory.openSession());
         }catch (Exception e){
             throw new Exception(e.getMessage());
+        }finally {
+            if(session != null) session.close();
         }
     }
 
     @Override
     public void delete(BaseModele modele) throws Exception {
         Transaction transaction = null;
-        try(Session session = factory.openSession()){
+        Session session = null;
+        try{
+            session = factory.openSession();
             transaction = session.beginTransaction();
             delete(modele, session);
         }catch (Exception e){
             if(transaction != null) transaction.rollback();
             e.printStackTrace();
             throw new Exception(e.getMessage());
+        }finally {
+            if(session != null) session.close();
         }
     }
 
     @Override
     public void update(BaseModele modele) throws Exception {
         Transaction transaction = null;
-        try(Session session = factory.openSession()){
+        Session session = null;
+        try{
+            session = factory.openSession();
             transaction = session.beginTransaction();
             update(modele, session);
         }catch (Exception e){
             if(transaction != null) transaction.rollback();
             e.printStackTrace();
             throw new Exception(e.getMessage());
+        }finally {
+            if(session != null) session.close();
         }
     }
 
     @Override
     public void save(BaseModele modele) throws Exception {
         Transaction transaction = null;
-        try(Session session = factory.openSession()){
+        Session session = null;
+        try{
+            session = factory.openSession();
             transaction = session.beginTransaction();
             save(modele, session);
         }catch (Exception e){
             if(transaction != null) transaction.rollback();
             e.printStackTrace();
             throw new Exception(e.getMessage());
+        }finally {
+            if(session != null) session.close();
         }
     }
 

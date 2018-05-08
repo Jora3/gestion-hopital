@@ -7,19 +7,17 @@ import annotations.Table;
 import modele.BaseModele;
 import modele.Medecin;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import utils.Utilitaire;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("All")
 public class GenericDAO implements InterfaceDAO {
 
     private String pagination(int nPage, int nDonne) {
@@ -87,6 +85,66 @@ public class GenericDAO implements InterfaceDAO {
         return params.substring(0, params.length()-1);
     }
 
+    private String getColumnsForSearch(BaseModele modele) {
+        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
+        StringBuilder columns = new StringBuilder();
+        int taille = fields.length-1;
+        for (int i=0; i<taille;i++) {
+            Column column = fields[i].getAnnotation(Column.class);
+            if (column != null)
+                columns.append(column.name()).append(" || '. ' || ");
+            else
+                columns.append(fields[i].getName()).append(" || '. ' || ");
+        }
+        if (fields[taille].getAnnotation(Column.class) != null)
+            columns.append(fields[taille].getAnnotation(Column.class).name());
+        else
+            columns.append(fields[taille].getName());
+        return columns.substring(0, columns.length());
+    }
+
+    private String getRequeteFullText(BaseModele modele) throws IllegalAccessException {
+        Table table = modele.getClass().getAnnotation(Table.class);
+        String document=getColumnsForSearch(modele);
+        Field[] fields = columnsTable(modele.getClass().getDeclaredFields());
+        int taille= fields.length-1;
+        String text = "";
+        for (int i=0; i<taille;i++) {
+            fields[i].setAccessible(true);
+            Object o = fields[i].get(modele);
+            text=text+" "+o+" |";
+        }
+        fields[taille].setAccessible(true);
+        text = text+" "+fields[taille].get(modele);
+        return String.format("SELECT * FROM \"%s\" WHERE to_tsvector( %s ) @@ to_tsquery('%s');", table.name(), document, text);
+    }
+
+    /**
+    * Callable after rs.next()
+    * */
+    private void setValues(BaseModele modele, ResultSet rs, Field[] fields) throws IllegalAccessException, SQLException {
+        for(Field f : fields){
+            f.setAccessible(true);
+            Column column = f.getAnnotation(Column.class);
+            if(column != null){ f.set(modele, rs.getObject(column.name()));}
+            else f.set(modele, rs.getObject(f.getName()));
+        }
+    }
+
+    private void set(BaseModele modele, ResultSet rs) throws Exception {
+        try {
+            Field[]   fields  = columnsTable(modele.getClass().getDeclaredFields());
+            if (rs.next()){
+                modele = modele.getClass().newInstance();
+                modele.setId(rs.getInt("id"));
+                setValues(modele, rs, fields);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+    }
+
     private List<BaseModele> list(BaseModele modele, ResultSet rs) throws Exception {
         List<BaseModele> modeleList = new ArrayList<>();
         try {
@@ -97,12 +155,7 @@ public class GenericDAO implements InterfaceDAO {
             while (rs.next()){
                 modele = modele.getClass().newInstance();
                 modele.setId(rs.getInt("id"));
-                for(Field f : fields){
-                    f.setAccessible(true);
-                    Column column = f.getAnnotation(Column.class);
-                    if(column != null){ f.set(modele, rs.getObject(column.name()));}
-                    else f.set(modele, rs.getObject(f.getName()));
-                }
+                setValues(modele, rs, fields);
                 modeleList.add(modele);
             }
             serialiserAll(modele, modeleList);
@@ -161,6 +214,7 @@ public class GenericDAO implements InterfaceDAO {
         ResultSet rs = null;
         String q = getRequeteFindAll(modele), aWhere = where(modele, strict), pagination = pagination(page, nbDonne);
         q += aWhere + pagination;
+        System.out.println(q);
         try (Connection conn = UtilDAO.getConnection();
              PreparedStatement statement = conn.prepareStatement(q)) {
             if(!aWhere.equals("")){
@@ -175,6 +229,21 @@ public class GenericDAO implements InterfaceDAO {
                     }
                 }
             }
+            return list(modele, rs = statement.executeQuery());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }finally {
+            UtilDAO.closeRessources(rs, null, null);
+        }
+    }
+
+    public List<BaseModele> findFullText(BaseModele modele) throws Exception {
+        ResultSet rs = null;
+        String q = getRequeteFullText(modele);
+        System.out.println(q);
+        try (Connection conn = UtilDAO.getConnection();
+             PreparedStatement statement = conn.prepareStatement(q)) {
             return list(modele, rs = statement.executeQuery());
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,8 +275,7 @@ public class GenericDAO implements InterfaceDAO {
              PreparedStatement statement = conn.prepareStatement(getRequeteFindById(modele))) {
             statement.setObject(1, modele.getId());
             rs = statement.executeQuery();
-            List<BaseModele> list = list(modele, rs);
-            if(list.size() != 0) modele = list.get(0);
+            set(modele, rs);
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -258,6 +326,7 @@ public class GenericDAO implements InterfaceDAO {
             PreparedStatement statement = connection.prepareStatement(getRequeteSave(modele))
             ) {
             setParamsSave(statement, modele);
+            System.out.println(statement);
             statement.executeUpdate();
             removeCache(modele);
         }
@@ -270,10 +339,9 @@ public class GenericDAO implements InterfaceDAO {
         Class classe = modele.getClass();
         Field[] fields = columnsTable(classe.getDeclaredFields());
         int i = 1;
-        Method method;
         for (Field field : fields) {
-            method = classe.getMethod("get" + Utilitaire.capitalize(field.getName()));
-            statement.setObject(i, method.invoke(modele));
+            field.setAccessible(true);
+            statement.setObject(i, field.get(modele));
             i++;
         }
     }

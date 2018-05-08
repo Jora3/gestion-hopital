@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 @Table(name = "Consultation")
-public class Consultation extends BaseModele implements Serializable {
+public class Consultation extends BaseModele {
     private Date dateConsultation;
     private Integer idMedecin;
     private Integer idPatient;
